@@ -1,24 +1,53 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "multimodal-auth"
-version = "0.1.0"
+version = "1.0.0"
 description = "Two-modality (face + voice) identity-verification prototype with attention-gated fusion"
 readme = "README.md"
-requires-python = ">=3.10"
-# NOTE: no license field on purpose. The repository has no LICENSE file yet and
-# the third-party situation must be reviewed first - see docs/OPEN_SOURCE_RISK.md
-# and the License section of README.md.
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE", "MODEL_NOTICE.md", "THIRD_PARTY_NOTICES.md"]
+authors = [{ name = "jianguo2015" }]
+keywords = [
+    "multimodal",
+    "face-recognition",
+    "speaker-verification",
+    "attention-fusion",
+    "onnxruntime",
+    "pytorch",
+    "identity-verification",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+# NOTE: the MIT license above covers the *code*. The trained parameters under
+# weights/ are distributed under the separate research/evaluation terms in
+# MODEL_NOTICE.md. See docs/RELEASE_AUDIT.md for the license decision record.
 dependencies = [
     "numpy>=1.24",
     "PyYAML>=6.0",
     "onnxruntime==1.24.1",
-    "opencv-python-headless>=4.8",
+    "opencv-python-headless>=4.8,<5",
     "librosa>=0.10",
     "soundfile>=0.12",
 ]
+
+[project.urls]
+Homepage = "https://github.com/jianguo2015/multimodal-auth"
+Repository = "https://github.com/jianguo2015/multimodal-auth"
+Issues = "https://github.com/jianguo2015/multimodal-auth/issues"
+Changelog = "https://github.com/jianguo2015/multimodal-auth/blob/main/CHANGELOG.md"
+
 
 [project.optional-dependencies]
 research = ["torch>=2.0", "torchvision>=0.15", "onnx>=1.14"]

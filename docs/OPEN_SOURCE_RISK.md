@@ -9,7 +9,7 @@ Verdict vocabulary: `SAFE` · `REVIEW` · `REMOVE` · `PRIVATE` · `UNKNOWN`.
 
 | item | where | verdict |
 | --- | --- | --- |
-| Real personal name inside a Windows path (`C:\Users\陶兴宇\...`) | `.idea/workspace.xml` (many entries), `.idea/CatDog.iml`, `.idea/misc.xml` | **REVIEW** — strip before publishing |
+| The local Windows user name inside a Windows path (`C:\Users\<name>\...`; redacted in Phase 2) | `.idea/workspace.xml` (many entries), `.idea/CatDog.iml`, `.idea/misc.xml` | **REVIEW** — strip before publishing |
 | Personal name possibly inside binary IDE state | `.vs/CatDog/v16/.suo` (47 KB) | **REMOVE** |
 | Real photos of the operator's face (5 × 960×1280, `IMG_20260419_13xxxx.jpg`) | `data/raw/face/User_Me/` | **PRIVATE** |
 | Real recordings of the operator's voice (10 × 48 kHz, 9–14 s, `录音机-20260419-13xx.wav`) | `data/raw/voice/User_Me/` | **PRIVATE** |
@@ -125,11 +125,32 @@ _phase0_audit/
 
 ## 9. Publication checklist
 
-- [ ] Remove every `PRIVATE` item listed in §1 and §2 from the working tree **and**
+Phase 2 executed this list. State of each item:
+
+- [x] Remove every `PRIVATE` item listed in §1 and §2 from the working tree and
       from history (there is no `.git` yet, so a fresh `git init` is clean).
-- [ ] Replace them with the `OPEN_SOURCE_SUBSTITUTE` generator from §2.
-- [ ] Never commit the `REVIEW` items in §1 (`.idea/workspace.xml`).
-- [ ] Delete the `REMOVE` items in §5.
-- [ ] Add `LICENSE`, `README.md`, `.gitignore`, `THIRD_PARTY_NOTICES.md`.
-- [ ] Rewrite the claims listed in §7 before writing the README.
+      *Done — `data/`, `live_capture.jpg`, `.idea/`, `.vs/` and the Phase 0 cache
+      are untracked and gitignored; `git ls-files` shows only the two generated
+      example files as media. The remaining history caveat (the pre-Phase-2
+      commits still quote the local path in the audit text) is documented in
+      `docs/RELEASE_AUDIT.md` §7.1.*
+- [x] Replace them with the `OPEN_SOURCE_SUBSTITUTE` generator from §2.
+      *Done — `examples/make_examples.py` produces deterministic synthetic inputs,
+      and `scripts/data/*` rebuilds features from whatever media a user supplies.*
+- [x] Never commit the `REVIEW` items in §1 (`.idea/workspace.xml`).
+      *Done — validated by `git status --porcelain --ignored`.*
+- [x] Delete the `REMOVE` items in §5.
+      *Done — they remain on the author's disk but are untracked and gitignored
+      (`my_gan_data/`, `pokemon.zip`, `1.py`–`3.py`, `train_gan.py`, `.venv*`).*
+- [x] Add `LICENSE`, `README.md`, `.gitignore`, `THIRD_PARTY_NOTICES.md`.
+      *Done — plus `MODEL_NOTICE.md`, `CHANGELOG.md` and the `.github/workflows/`
+      workflow. The license decision splits code (MIT) from model weights
+      (research/evaluation notice).*
+- [x] Rewrite the claims listed in §7 before writing the README.
+      *Done — the README states the toy-dataset provenance, the withdrawn
+      "22× faster" claim, the historical-only Pi status and the prototype-level
+      experimental boundary.*
 - [ ] Decide the fate of the "创新方案B" wording with the author.
+      *Still open — see `docs/RELEASE_AUDIT.md` §10.5. It remains a frozen
+      historical label; the published README and docs describe the fusion
+      mechanism in neutral terms. This is the author's call, not an audit one.*

@@ -47,13 +47,13 @@ PyTorch 教程数据集下载脚本（`3.py`）。
 
 ## 3. 当前技术栈（按实际执行的解释器取证）
 
-原始解释器 **`D:\Python313\python.exe`（Python 3.13.1）** —— 依据：
+原始解释器 **`<original-interpreter>\python.exe`（Python 3.13.1）** —— 依据：
 
 * `.idea/misc.xml` → `project-jdk-name="Python 3.13"`；
 * 项目内 `__pycache__/*.cpython-313.pyc`；
-* `D:\Python313` 中同时存在 torch / onnx / onnxruntime / cv2 / librosa / sklearn。
+* 该解释器中同时存在 torch / onnx / onnxruntime / cv2 / librosa / sklearn。
 
-| 库 | 原始环境 `D:\Python313` 实测 | 项目 `.venv` | anaconda base | Phase 0 隔离环境 |
+| 库 | 原始环境实测 | 项目 `.venv` | anaconda base | Phase 0 隔离环境 |
 | --- | --- | --- | --- | --- |
 | Python | 3.13.1 | 3.12.4 | 3.12.4 | 3.12.x |
 | torch | **2.7.1+cu118** | 2.11.0 | 2.6.0+cpu | — |
@@ -265,7 +265,7 @@ processed/voice_features/<spk>/*.npy  (1,40,400) float32 ×35
 
 ## 9. 模型清单（参数为脚本实测值，非估算）
 
-由 `state_dict()` 直接统计（`D:\Python313`，torch 2.7.1）：
+由 `state_dict()` 直接统计（原始解释器，torch 2.7.1）：
 
 | Model | Framework | Input | Output | Parameters | state_dict bytes | 原 .pth 大小 | 被谁使用 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -384,7 +384,7 @@ TFLite / Edge / Deployment / cv2.dnn`，命中文件全部列出（`_phase0_audi
 * 真实摄像头 + 麦克风采集（代码不存在）；
 * 原始训练随机过程（无 seed，重跑得到不同权重）；
 * INT8 是否真的"加速"（实测在本机 x86 上慢了 22 倍，Pi 上结果未知）；
-* 03/04 在**原始解释器 `D:\Python313`** 下的原始权重（无 seed，无法回放）。
+* 03/04 在**原始解释器**下的原始权重（无 seed，无法回放）。
 
 ## 19. 已知问题（按严重程度）
 
@@ -405,7 +405,7 @@ TFLite / Edge / Deployment / cv2.dnn`，命中文件全部列出（`_phase0_audi
 8. **【无文档/无测试/无 Git】** 0 个 `.md`、0 个测试、无版本控制。
 9. **【PATH 敏感】** 所有脚本依赖 cwd；非 ASCII 绝对路径下 `cv2.imread` 直接失败。
 10. **【环境损毁】** 项目自带 `.venv` 已不可用（缺 numpy、缺 pip 模块），
-    `.venv1` 只有 pip；真正的环境在项目外的 `D:\Python313`。
+    `.venv1` 只有 pip；真正的环境在项目外的独立解释器安装目录。
 
 ## 20. 代码技术债
 

@@ -137,7 +137,7 @@ no schema validation, no env override:
 | F2 | Edge entry has no real data acquisition | `pi_main.py:29-36 dummy_capture()` |
 | F3 | Emoji print raises on a GBK console | measured `UnicodeEncodeError` (`_phase0_audit/_pi_harness.txt`) |
 | F4 | Everything depends on CWD | every script uses `"../…"`; `from hardware_monitor import …` |
-| F5 | Non-ASCII absolute paths break `cv2.imread` | measured: absolute `C:\Users\陶兴宇\…` → None; relative path → OK |
+| F5 | Non-ASCII absolute paths break `cv2.imread` | measured: an absolute path under a non-ASCII Windows user directory → None; relative path → OK |
 | F6 | Training is not reproducible | no `torch.manual_seed` / `np.random.seed` anywhere |
 | F7 | `00_download_face_data.py` deletes the real photos | `shutil.rmtree("../data/raw/face")` L12-13 |
 | F8 | `.pth` and `_quant.onnx` may silently diverge | separate artefacts; nothing verifies they came from the same run |

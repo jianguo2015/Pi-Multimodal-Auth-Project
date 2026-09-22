@@ -3,6 +3,42 @@
 **Status: historical. Nothing in this project was ever measured on a Raspberry
 Pi, and no Pi deployment is supported.**
 
+## Historically validated
+
+These parts are real and carry evidence inside this repository:
+
+* the two extractors and the fusion head were defined, trained and exported
+  **with an edge size budget in mind** — 560 K parameters, 4.85 MB of weights, of
+  which 0.6 MB is the three INT8 graphs (`docs/MODEL_ARTIFACT_MANIFEST.md`);
+* `app_pi/pi_main.py` is a genuine entry point: it was written for the Pi, it
+  loads the three INT8 graphs and executes voice → face → fusion → threshold;
+* the INT8 graphs **do** load and run under `onnxruntime>=1.24.1` (reproduced
+  during Phase 0 and again in Phase 1: mean 0.9198 on the genuine grid);
+* the failure of the historical pinned environment was reproduced twice
+  (`onnxruntime==1.16.0` and 1.20.1 cannot load the `ConvInteger` graphs).
+
+## Not currently reproducible
+
+* **Raspberry Pi hardware is currently unavailable, so no current hardware
+  benchmark is claimed.** There is no Pi log, no screenshot and no measurement
+  anywhere in this repository.
+* There is no capture path: `app_pi/pi_main.py` feeds `np.random.randn`
+  placeholders (`dummy_capture`), so its printed latency excludes decoding,
+  detection, MFCC extraction and capture itself.
+* `app_pi/hardware_monitor.py` reads `/sys/firmware/devicetree/base/model` and
+  `/sys/class/thermal/thermal_zone0/temp`; it cannot run off-device, and its
+  temperature fallback (`temp_c = 0.0`) is a placeholder, not a reading.
+
+## Known historical problems
+
+| problem | detail |
+| --- | --- |
+| unusable Pi requirement pin | `requirements/historical/requirements_pi.txt` pins `onnxruntime==1.16.0`, which cannot load the shipped INT8 graphs (moved to `requirements/historical/` so it cannot be installed by accident) |
+| no real acquisition | `dummy_capture()` returns random arrays; the original latency report therefore measured almost nothing |
+| placeholder temperature | `hardware_monitor.py` falls back to `0.0` when the thermal zone is unreadable |
+| crash on a GBK console | the emoji verdict print raises `UnicodeEncodeError` and was swallowed as "initialisation failed" |
+| an unsupported speed claim | "INT8 on the Pi is 22× faster" was never measured; on x86_64 the measured ratio is 26.3× *slower* (`docs/BENCHMARKS.md`) |
+
 ## What the original project claimed
 
 `docs/PHASE0_AUDIT_REPORT.md` records the original report's claims. The two

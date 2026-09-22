@@ -10,7 +10,7 @@ All commands below were executed during Phase 0 unless marked otherwise.
 
 ### 1. Face preprocessing — bit-identical ✔
 ```powershell
-D:\Python313\python.exe _phase0_audit\probe_preprocessing.py
+<original-interpreter>\python.exe _phase0_audit\probe_preprocessing.py
 # face_total: 55, face_identical: 55
 ```
 `_phase0_audit/preprocessing_probe.json`. The probe calls the project's own
@@ -25,14 +25,14 @@ librosa version changes the resampler and breaks byte equality.
 
 ### 3. fp32 ONNX end-to-end inference ✔
 ```powershell
-D:\Python313\python.exe _phase0_audit\stepA2_onnx_run.py
+<original-interpreter>\python.exe _phase0_audit\stepA2_onnx_run.py
 # [fp32] v_emb(10,128) f_emb(5,128) grid(10,5) mean=0.9182 min=0.8943 max=0.9293
 # [fp32] end-to-end latency (CPU, this host): 1.48 ms/sample
 ```
 Works on ORT 1.17.3, 1.20.1 and 1.24.1.
 
 ### 4. INT8 ONNX end-to-end inference ✔ (needs a recent ONNX Runtime)
-Same command, INT8 branch, on **ORT 1.24.1** (`D:\Python313`):
+Same command, INT8 branch, on **ORT 1.24.1** (the original interpreter):
 ```
 [quant] mean=0.9198 min=0.8945 max=0.9328
 [quant] end-to-end latency (CPU, this host): 33.42 ms/sample
@@ -43,7 +43,7 @@ Same command, INT8 branch, on **ORT 1.24.1** (`D:\Python313`):
 
 ### 5. The real edge entry point — runs, and exposes two defects ✔
 ```powershell
-D:\Python313\python.exe _phase0_audit\run_pi_entry_harness.py
+<original-interpreter>\python.exe _phase0_audit\run_pi_entry_harness.py
 ```
 ```
 [Pi] 初始化多模态推理引擎...
@@ -70,7 +70,7 @@ model files.
 
 ### 7. PyTorch weights, full score matrix and decision threshold ✔
 ```powershell
-C:\ProgramData\anaconda3\python.exe _phase0_audit\verify_inplace_weights.py
+<other-interpreter>\python.exe _phase0_audit\verify_inplace_weights.py
 ```
 | pair | n | mean | min | max | accept@0.85 |
 | --- | --- | --- | --- | --- | --- |
@@ -96,10 +96,10 @@ They are functional — and they caused the checkpoint overwrite documented in
 
 | capability | what is missing | how to fix |
 | --- | --- | --- |
-| `scripts_pc/01_process_audio.py` as a script | `librosa` in the interpreter used | use `D:\Python313` (librosa 0.11.0 present) |
-| `scripts_pc/02_process_face.py` as a script | must run from `scripts_pc/`; `cv2.data.haarcascades` must sit on an ASCII path | use `D:\Python313` (ASCII install dir) |
-| `scripts_pc/05_export_and_quantize.py` | needs `onnx` + `onnxruntime.quantization` in one process | present in `D:\Python313` (onnx 1.20.1) |
-| running the edge entry without a harness | `sounddevice` is not installed in `D:\Python313` | `pip install sounddevice==0.4.6` |
+| `scripts_pc/01_process_audio.py` as a script | `librosa` in the interpreter used | use the original interpreter (librosa 0.11.0 present) |
+| `scripts_pc/02_process_face.py` as a script | must run from `scripts_pc/`; `cv2.data.haarcascades` must sit on an ASCII path | use the original interpreter (ASCII install dir) |
+| `scripts_pc/05_export_and_quantize.py` | needs `onnx` + `onnxruntime.quantization` in one process | present in the original interpreter (onnx 1.20.1) |
+| running the edge entry without a harness | `sounddevice` is not installed in the original interpreter | `pip install sounddevice==0.4.6` |
 | INT8 inference on this laptop | an ONNX Runtime version that implements `ConvInteger` | ORT 1.24.1 works; 1.17.3 / 1.20.1 do not |
 
 ---
@@ -110,7 +110,7 @@ They are functional — and they caused the checkpoint overwrite documented in
 | --- | --- | --- |
 | **Raspberry Pi deployment** | `app_pi/` code + `requirements_pi.txt` + Pi-only telemetry code + INT8 models | *Historical deployment evidence only. Current hardware reproduction unavailable.* No Pi, no Pi log, no Pi screenshot, no Pi performance number anywhere in the repo. |
 | The original training run | `weights/pytorch_pth/*.pth` mtime 2026-04-19 14:59:15/22, ONNX 14:59:28, PyCharm coverage entries 14:59:00–14:59:25 in `.idea/workspace.xml` | no seeds → the exact weights cannot be regenerated; the original `face_extractor` BN statistics are unrecoverable (folded into ONNX) |
-| The original interpreter state | `.idea/misc.xml` SDK "Python 3.13" + `__pycache__/*.cpython-313.pyc`; `D:\Python313` still holds torch 2.7.1+cu118 / ORT 1.24.1 | the project's own `.venv` is broken (no numpy, no pip) and is *not* the environment that trained the models |
+| The original interpreter state | `.idea/misc.xml` SDK "Python 3.13" + `__pycache__/*.cpython-313.pyc`; the original interpreter still holds torch 2.7.1+cu118 / ORT 1.24.1 | the project's own `.venv` is broken (no numpy, no pip) and is *not* the environment that trained the models |
 | `data/processed/*/User_Me/*.npy` provenance | the features are bit-reproducible today, so the generating pipeline is known | the `User_Me` **raw** media is the author's own face and voice; nothing else can confirm who was recorded |
 
 ---

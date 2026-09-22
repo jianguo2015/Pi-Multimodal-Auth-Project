@@ -74,7 +74,7 @@ Reconstruction quality (from `_phase0_audit/stepB_report.json`):
   parameter-identical; the zip/pickle container bytes may differ from the
   2026-04-19 files.
 * If the pre-incident originals are needed byte-for-byte, they may still exist
-  in the OneDrive version history of `weights/pytorch_pth/`. After restoring
+  in the cloud-sync version history of `weights/pytorch_pth/`. After restoring
   them, re-run `_phase0_audit/verify_inplace_weights.py`; the genuine mean must
   remain `0.9182`, and this manifest must be regenerated.
 

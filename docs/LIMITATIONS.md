@@ -15,6 +15,16 @@ about to present, demo or build on this project, read it first.
   not a FAR/FRR estimate, and not evidence of biometric quality. A model that
   separates 1 identity from 5 synthetic ones can still be useless — or
   dangerous — on real people.
+* **Which impostor figure is quoted.** An earlier Phase 0 note says `0.0483`;
+  that was the maximum over a 35-pair subset (one stranger modality at a time).
+  The Phase 1 expansion to all 625 stranger/identity pairs raises the observed
+  maximum to `0.0511`, with `0 / 625` pairs accepted. The conclusion is unchanged;
+  the 625-pair figure is what this repository publishes everywhere.
+* **Boundary in one reusable sentence:**
+  *"The current evaluation is a prototype-level experiment, not a production
+  biometric benchmark. The reported genuine/impostor separation is based on the
+  available experimental dataset and should not be interpreted as
+  production-grade biometric accuracy or security."*
 
 ## 2. No evaluation protocol
 
@@ -54,6 +64,10 @@ this same tiny set, i.e. it is fitted to the data it is reported on.
   x86_64.
 * The INT8 graphs need `onnxruntime>=1.24.1` (`ConvInteger`). The historical
   Pi pin `1.16.0` cannot even load them.
+* `opencv-python-headless` is pinned `<5` on purpose: the 5.x wheels no longer
+  ship `cv2/data/haarcascade_*.xml` and expose no `cv2.CascadeClassifier`, so an
+  unpinned install breaks every face input on a clean machine
+  (`docs/RELEASE_AUDIT.md` §3).
 * Preprocessing dominates end-to-end latency: Haar detection on a full-size
   photo is far more expensive than all three networks together.
 * Everything measured here is single-process, single-thread-pool, CPU only.
@@ -86,8 +100,11 @@ non-ASCII user name), which is how these were found:
   `onnx.shape_inference.infer_shapes_path` uses the narrow-character API.
   `scripts/export.py` detects this and stages in an ASCII-only scratch
   directory.
-* Recommendation: clone into an ASCII-only path (e.g. `C:\src\multimodal-auth`)
+* Recommendation: clone into an ASCII-only path (e.g. `<ascii-only-root>\multimodal-auth`)
   if you hit any other third-party path issue.
+* The supported Python floor is **3.11**, not 3.10: the pinned
+  `onnxruntime==1.24.1` ships cp311–cp314 wheels only
+  (`docs/RELEASE_AUDIT.md` §3.2).
 
 ## 8. What is *not* claimed
 

@@ -22,6 +22,24 @@ python -m pytest -m "not private_data"          # only the public, data-free par
 A fresh clone therefore gets a green suite, while a machine holding the
 enrolment data additionally verifies the published accuracy numbers.
 
+### Measured counts per environment
+
+The environment decides how many tests *exist*: the research extras
+(`requirements/research.txt`, i.e. torch) add eight fusion tests, and a module
+that cannot import torch is reported as a single skip instead of a collection
+error. All four combinations below are correct, and all four are measured:
+
+| environment | command | measured |
+| --- | --- | --- |
+| runtime + test requirements (no torch), no `data/` | `python -m pytest -m "not private_data"` | **113 passed, 5 skipped, 4 deselected** |
+| same, whole suite | `python -m pytest` | **113 passed, 9 skipped** |
+| runtime + test + research extras, no `data/` | `python -m pytest` | **125 passed, 4 skipped** |
+| everything installed **and** the enrolment data present | `python -m pytest` | **129 passed** |
+
+`docs/FRESH_CLONE_VALIDATION.md` names every skipped test and its reason, and
+`.github/workflows/ci.yml` runs the torch-less and the torch-carrying combination
+so neither number can drift unnoticed.
+
 The suite never writes outside `tmp_path` or `<root>/outputs/tests-sandbox`
 (cleaned up), and it never reads `data/` unless the private tier is active.
 
@@ -76,7 +94,10 @@ media and compares with `np.testing.assert_array_equal` — bit equality, not
 * Raspberry Pi behaviour — no device available.
 * `app_pi/` and `scripts_pc/` — historical code, deliberately frozen.
 * Any real-world accuracy claim — the data does not exist for it.
-* There is **no CI configuration** in this repository yet. Before publishing,
-  add a workflow that runs `python -m pytest -m "not private_data"` on
-  Linux/Windows with `requirements/dev.txt`; the private tier cannot run there
-  by design.
+* The `private_data` tier cannot run in CI by design, because the enrolment data
+  is not published. `.github/workflows/ci.yml` therefore runs the public tier
+  twice — once without the research extras and once with them — and asserts that
+  the four reference tests are skipped *for the missing biometric data* and for
+  no other reason. A module that cannot import torch is reported as a skip rather
+  than as a collection error, so `-m "not private_data"` is meaningful in a
+  torch-less environment.

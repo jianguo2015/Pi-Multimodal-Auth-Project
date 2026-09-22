@@ -95,3 +95,22 @@ change and the evidence for each.
 | PyTorch vs INT8 per-pair score difference | ≤ 0.0028 |
 | `weights/` hashes after running data / train / export / benchmark scripts | unchanged |
 | test suite | 129 passed |
+
+## Phase 2 correction to the counts above
+
+"129 passed" is the *full* environment: runtime + test + research extras **and**
+the private enrolment data present. The other environments give other (all
+correct) numbers, and they are now stated everywhere instead of a single figure:
+
+| environment | result |
+| --- | --- |
+| runtime + test requirements, no enrolment data (public clone) | 113 passed, 5 skipped, 4 deselected (`-m "not private_data"`) |
+| runtime + test + research extras, no enrolment data | 125 passed, 4 skipped |
+| everything + enrolment data | 129 passed |
+
+The Phase 1 note "125 passed, 4 skipped on a fresh clone" therefore described the
+*research-extras* environment. Phase 2 found three defects that the single number
+was hiding and fixed them: `pytest -m "not private_data"` failed during collection
+without torch, `scripts/data/*` was invisible to git, and the declared Python
+floor was uninstallable. See `docs/RELEASE_AUDIT.md` §3 and
+`docs/FRESH_CLONE_VALIDATION.md`.

@@ -80,11 +80,11 @@ traceability in `_phase0_audit/retrained_by_phase0/`.
   parameter-identical to the originals; only pickle/zip serialisation bytes may
   differ from the 2026-04-19 files.
 * `face_extractor_weights.pth` is behaviour-identical but **not byte-identical**
-  and its BN statistics are lost. If a byte-exact copy matters, use OneDrive
-  version history: right-click the file → *Version history* → pick the
-  2026-04-19 version. The folder lives inside OneDrive, so the old revisions
-  should still be available there.
-* If you restore from OneDrive, re-run
+  and its BN statistics are lost. If a byte-exact copy matters, use the
+  cloud-sync version history: right-click the file → *Version history* → pick
+  the 2026-04-19 version. The original folder was cloud-synced, so those
+  revisions may still be available.
+* If you restore from that version history, re-run
   `_phase0_audit/verify_inplace_weights.py` and compare with
   `_phase0_audit/inplace_verification.json` — the numbers must stay
   `genuine mean = 0.9182`.

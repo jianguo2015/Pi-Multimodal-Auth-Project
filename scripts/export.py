@@ -125,7 +125,7 @@ def ascii_scratch_dir(preferred: Path, run_name: str) -> Path:
         return candidate
     raise SystemExit(
         "no writable ASCII-only scratch directory found. Cloning this repository "
-        "into an ASCII-only path (e.g. C:\\src\\multimodal-auth) fixes it, or run "
+        "into an ASCII-only path (e.g. <ascii-only-root>\\multimodal-auth) fixes it, or run "
         "with --skip-quantise to export fp32 graphs only."
     )
 

@@ -64,18 +64,25 @@ If you reuse this code with your own data:
 * do not commit benchmark or training logs that embed absolute paths (Phase 1
   made `scripts/benchmark.py` record repository-relative paths for this reason).
 
-## 5. Open-source and licensing risk
+## 5. Open-source and licensing risk — resolved for this release
 
-`docs/OPEN_SOURCE_RISK.md` (Phase 0) lists the third-party items: the Haar
-cascade from OpenCV, the Orl/Olivetti-style face images used for the synthetic
-strangers, and the research-only status of some original data sources. Two
-practical points:
+`docs/OPEN_SOURCE_RISK.md` (Phase 0) listed the third-party items and the open
+questions about them. The release decision record is
+`docs/RELEASE_AUDIT.md`; the operative terms are `LICENSE`,
+`MODEL_NOTICE.md` and `THIRD_PARTY_NOTICES.md`.
 
-* no LICENSE file has been added on purpose — choosing one is the owner's call;
-* the Phase 0 audit documents (`docs/PHASE0_*.md`, `docs/CORE_ARCHITECTURE.md`)
-  quote the local absolute path, which contains the Windows user name. They are
-  the audit record and were deliberately not rewritten; if you publish them as
-  is, that user name becomes public. Strip it first if that matters to you.
+| Phase 0 question | how it was resolved |
+| --- | --- |
+| which license, if any? | MIT for the code (`LICENSE`). The trained weights are **not** MIT: they ship under a separate research/evaluation notice, because the Olivetti/ORL face database (research use, credit to AT&T Laboratories Cambridge) contributed to training them |
+| the Haar cascade | not redistributed at all — it is loaded at runtime from the installed OpenCV package. Its Intel/BSD-3-style header and the Lienhart/Maydt attribution are recorded in `THIRD_PARTY_NOTICES.md` §2, and `opencv-python-headless` is pinned `<5` because 5.x stopped shipping it |
+| local absolute paths in the audit documents | sanitized in Phase 2 for the working tree; the two pre-Phase-2 commits still contain the original text, which is documented in `docs/RELEASE_AUDIT.md` §7.1 |
+| reports leaking local paths | benchmark reports already used repository-relative paths; the `scripts/infer.py --json` report was fixed the same way, so `model_files` reads `weights/onnx/...` |
+| the "创新方案B" novelty wording | left in place as a frozen historical label and flagged as an open item for the author (`docs/RELEASE_AUDIT.md` §10.5) |
+
+Two questions remain open and are not conclusions this project can reach on its
+own: whether parameters trained with a research-use dataset are a derivative work
+(§10.6), and the institutional/IP question behind the novelty wording (§10.5).
+Commercial use of the shipped weights is therefore not granted.
 
 ## 6. Reporting a problem
 

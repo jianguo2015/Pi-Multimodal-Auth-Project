@@ -9,7 +9,7 @@
 # Phase 1 must NOT retrain or re-tune any of these.
 #
 # Paths are resolved relative to the project root, so the repository can be
-# cloned/moved anywhere (no absolute paths, no OneDrive dependency).
+# cloned/moved anywhere (no absolute paths, no cloud-sync dependency).
 # ---------------------------------------------------------------------------
 
 project:

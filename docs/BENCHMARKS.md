@@ -1,6 +1,8 @@
-# Benchmarks
+# Observed benchmark
 
-Measurement of the *shipped* artifacts on the development host. The raw evidence
+Measurement of the *shipped* artifacts on **one** development host. It is an
+observation, not a performance specification: the same graphs behave differently
+on another CPU, another runtime version or another thread count. The raw evidence
 for the run below is committed next to this file
 (`docs/benchmarks/20260922-development-host.{md,json}`), and it can be
 regenerated at any time with:
@@ -14,12 +16,20 @@ python scripts/benchmark.py --runs 30
 
 | item | value |
 | --- | --- |
-| host | Windows 10/11 x86_64 desktop |
+| operating system | Windows 11 Home 25H2, build 10.0.26200, x86_64 |
+| CPU | AMD Ryzen 9 7945HX (16 cores / 32 logical processors) |
+| GPU | NVIDIA GeForce RTX 4060 Laptop — **not used** by this benchmark |
+| RAM | 15.7 GB total; peak RSS during the run: **N/A — not measured** |
 | Python | 3.13.1 |
-| onnxruntime | 1.24.1 (CPUExecutionProvider) |
+| onnxruntime | 1.24.1 (`CPUExecutionProvider`; `AzureExecutionProvider` is also listed by the runtime but not selected) |
 | intra_op_num_threads | 2 |
-| inputs | `examples/sample_face.jpg` (512×512), `examples/sample_voice.wav` (2.0 s) |
-| warmup / runs | 5 / 30 |
+| models | the nine files in `weights/` (sizes in the table below) |
+| inputs | `examples/sample_face.jpg` (512×512), `examples/sample_voice.wav` (2.0 s, 16 kHz) |
+| warmup / runs | 5 / 30 per model (10 runs for the end-to-end row) |
+| model load time / cold start | **N/A — not measured** |
+
+No Raspberry Pi and no other accelerator was involved. Nothing in this table is a
+Pi measurement.
 
 Committed raw evidence: [`docs/benchmarks/20260922-development-host.md`](benchmarks/20260922-development-host.md)
 and the matching `.json` next to it.
@@ -43,6 +53,14 @@ and the matching `.json` next to it.
 | end-to-end incl. preprocessing (INT8) | 59.973 ms median (60.520 ms mean) |
 
 ## Interpretation
+
+> On the tested x86 environment, the shipped INT8 model was substantially slower
+> than FP32. This benchmark does not imply that INT8 is universally slower;
+> runtime and hardware strongly affect quantized inference performance.
+
+Quantisation is treated here as a **deployment experiment**, not as an assumption
+that quantisation must be faster. On this host it is not, and that is the result
+that gets published.
 
 1. **The "INT8 is 22× faster" claim in the original report is not reproducible.**
    On this x86_64 host the three INT8 graphs are ~26× *slower* than the fp32

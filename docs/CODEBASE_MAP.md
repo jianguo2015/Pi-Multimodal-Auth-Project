@@ -246,5 +246,5 @@ Status vocabulary: `CORE` · `ACTIVE` · `EXPERIMENT` · `LEGACY` · `DEMO` · `
 | `.idea/` | `CatDog.iml`, `misc.xml` (Python 3.13), `workspace.xml` (2026-03-24) | ignore |
 | `.vs/CatDog/v16/.suo` | Visual Studio binary state | ignore |
 | `_phase0_audit/` | **added by Phase 0** — scripts, inventory, evidence JSON | audit output |
-| `_workers_init.txt` | 0 content relevance, present at `C:\AI`, not in CatDog | n/a |
+| `_workers_init.txt` | 0 content relevance, present in an unrelated workspace, not in CatDog | n/a |
 

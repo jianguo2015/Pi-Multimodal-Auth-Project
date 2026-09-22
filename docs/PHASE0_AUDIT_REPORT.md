@@ -1,6 +1,6 @@
 # PHASE0_AUDIT_REPORT.md — final Phase 0 audit result
 
-Date: 2026-09-22 · Scope: `C:\Users\陶兴宇\OneDrive\Desktop\CatDog\CatDog`
+Date: 2026-09-22 · Scope: `<project-root>` (the original local path was redacted in Phase 2)
 Mode: evidence-first, read-only (with one accidental write, fully remediated —
 see `PHASE0_REMEDIATION_NOTICE.md`).
 
@@ -31,7 +31,7 @@ Details and residuals: `PHASE0_REMEDIATION_NOTICE.md`.
 
 ## B. Technical Stack
 
-Python 3.13.1 (`D:\Python313`) · PyTorch 2.7.1+cu118 · torchvision · ONNX 1.20.1 ·
+Python 3.13.1 (`<original-interpreter>`) · PyTorch 2.7.1+cu118 · torchvision · ONNX 1.20.1 ·
 ONNX Runtime 1.24.1 (Pi side pins 1.16.0 → broken, see D/F) · OpenCV 4.13 ·
 librosa 0.11.0 · scikit-learn 1.8.0 · numpy 2.3.5 · soundfile · psutil · PyYAML ·
 sounddevice (missing in the original env).
@@ -230,7 +230,7 @@ not score fusion. Measured INT8-vs-fp32 agreement: genuine score 0.9198 vs 0.918
 [x] 我知道模型输入输出（ONNX 输入名与形状为实测值）
 [x] 我知道多模态在哪里融合（attention_fusion.py L31-44，late attention-gated）
 [x] 我知道决策逻辑（单阈值 0.85）
-[x] 我知道当前如何运行（用 D:\Python313；见 REPRODUCTION_STATUS.md）
+[x] 我知道当前如何运行（用原始本地解释器；见 REPRODUCTION_STATUS.md）
 [x] 我知道哪些代码是旧实验（00_download_face_data.py, 1/2/3.py, train_gan.py, my_gan_data）
 [x] 我知道哪些代码是真正核心（models/, utils/, scripts_pc/01..05, app_pi/）
 [x] 我知道哪些资源不能公开（User_Me 原始媒体与特征、live_capture.jpg、.idea）
