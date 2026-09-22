@@ -9,7 +9,7 @@ derived, and the per-test skip tables are complete.
 ## 1. What was cloned, and into what
 
 ```bash
-git clone <release repository> C:/AI/multimodal_auth_fresh    # ASCII-only path, on purpose
+git clone <release repository> <ascii-only-workdir>/multimodal_auth_fresh    # ASCII-only path, on purpose
 python -m venv .venv
 .venv/Scripts/python -m pip install -r requirements/dev.txt   # the documented install
 ```

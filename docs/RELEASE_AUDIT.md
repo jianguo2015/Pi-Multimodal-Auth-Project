@@ -233,17 +233,20 @@ and `data/(raw|processed)/`. Command in §12.
 | run | total hits | real findings |
 | --- | --- | --- |
 | before sanitization | 103 | 3 paths containing the local Windows user name, 18 machine-specific interpreter paths, 6 `OneDrive` mentions, 1 unrelated-workspace path, 1 illustrative `C:\src\...` example |
-| after sanitization | 70 | **none** — see the benign breakdown below |
+| after sanitization, over the released tree | 105 | **none** — every remaining hit is one of the benign categories below |
 
-Benign remainder, explained in full so nobody has to re-litigate it:
+The *total* grows whenever documentation is added (a URL, a new `data/raw/`
+sentence), so the categories matter, not the number. Benign remainder, explained
+in full so nobody has to re-litigate it:
 
-| category | count | why it is not a problem |
-| --- | --- | --- |
-| the strings `data/raw/` and `data/processed/` | 61 | relative paths that *document where the private data lives* (in `docs/`, `config/settings.yaml`, the frozen `scripts_pc/` files). They are the point of the privacy documentation and are required by the pipeline. |
-| the words `password` / `secret` | 3 | they appear inside `docs/OPEN_SOURCE_RISK.md` where the *scan patterns themselves* are quoted, not as a credential |
-| `s://github.com/...` | 4 | regex false positive: the scanner's drive-letter pattern matches the `s:` of `https:` in `pyproject.toml` URLs |
-| `p://` | 1 | regex false positive inside a URL fragment in `tests/test_config.py` |
-| `C:\Users\<name>\...` | 1 | the deliberate redaction placeholder in `docs/OPEN_SOURCE_RISK.md` §1 (it records *that* a Windows user name used to be in the text) |
+| category | why it is not a problem |
+| --- | --- |
+| the strings `data/raw/` and `data/processed/` | relative paths that *document where the private data lives* (in `docs/`, `config/settings.yaml`, the frozen `scripts_pc/` files, `scripts/data/`). They are the point of the privacy documentation and are required by the pipeline. |
+| the words `password` / `secret` | they appear where this repository *documents the scanning rules* (`docs/OPEN_SOURCE_RISK.md` §1/§4, §7 of this file), never as a credential |
+| `s://github.com/...`, `s://download.pytorch.org`, `p://` | regex false positives: the scanner's drive-letter pattern matches the `s:` of `https:`. They occur in `pyproject.toml`, `README.md`, `LICENSE`, `CHANGELOG.md`, `THIRD_PARTY_NOTICES.md`, `.github/workflows/ci.yml` and `tests/test_config.py` |
+| `/home/` inside `.github/workflows/ci.yml` | the CI assertion that *forbids* absolute paths has to name the pattern it forbids |
+| `C:\Users\<name>\...` | the deliberate redaction placeholder in `docs/OPEN_SOURCE_RISK.md` §1 and in §7 above (they record *that* a Windows user name used to be in the text) |
+| `C:\src\...` | quoted in §7 above as an example of the illustrative paths that were removed |
 
 Sanitization method: `docs/…`, `configs/default.yaml` and one error message in
 `scripts/export.py` were edited by an assertion-checked script — 29 substitutions
