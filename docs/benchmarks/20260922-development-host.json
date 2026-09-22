@@ -1,0 +1,122 @@
+{
+  "generated_at": "2026-09-22T20:12:02",
+  "environment": {
+    "python": "3.13.1",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor": "AMD64 Family 25 Model 97 Stepping 2, AuthenticAMD",
+    "onnxruntime": "1.24.1",
+    "providers": [
+      "AzureExecutionProvider",
+      "CPUExecutionProvider"
+    ],
+    "intra_op_num_threads": 2
+  },
+  "inputs": {
+    "face": "examples/sample_face.jpg",
+    "voice": "examples/sample_voice.wav",
+    "face_tensor_shape": [
+      3,
+      112,
+      112
+    ],
+    "voice_tensor_shape": [
+      1,
+      40,
+      400
+    ]
+  },
+  "warmup": 5,
+  "runs": 30,
+  "onnx_models": {
+    "face_int8": {
+      "runs": 30,
+      "warmup": 5,
+      "mean_ms": 7.8403,
+      "median_ms": 7.8586,
+      "min_ms": 7.5512,
+      "max_ms": 8.1374,
+      "p95_ms": 8.1154,
+      "stdev_ms": 0.1968,
+      "file": "face_extractor_quant.onnx",
+      "bytes": 432865
+    },
+    "voice_int8": {
+      "runs": 30,
+      "warmup": 5,
+      "mean_ms": 25.2183,
+      "median_ms": 25.4409,
+      "min_ms": 23.7653,
+      "max_ms": 26.7588,
+      "p95_ms": 26.4484,
+      "stdev_ms": 0.9243,
+      "file": "voice_extractor_quant.onnx",
+      "bytes": 117288
+    },
+    "fusion_int8": {
+      "runs": 30,
+      "warmup": 5,
+      "mean_ms": 0.0214,
+      "median_ms": 0.0211,
+      "min_ms": 0.0206,
+      "max_ms": 0.0241,
+      "p95_ms": 0.0241,
+      "stdev_ms": 0.0009,
+      "file": "attention_fusion_quant.onnx",
+      "bytes": 40172
+    },
+    "face_fp32": {
+      "runs": 30,
+      "warmup": 5,
+      "mean_ms": 0.3135,
+      "median_ms": 0.3105,
+      "min_ms": 0.3065,
+      "max_ms": 0.3472,
+      "p95_ms": 0.3345,
+      "stdev_ms": 0.0095,
+      "file": "face_extractor_fp32.onnx",
+      "bytes": 1687815
+    },
+    "voice_fp32": {
+      "runs": 30,
+      "warmup": 5,
+      "mean_ms": 0.9466,
+      "median_ms": 0.941,
+      "min_ms": 0.9284,
+      "max_ms": 0.9786,
+      "p95_ms": 0.968,
+      "stdev_ms": 0.0145,
+      "file": "voice_extractor_fp32.onnx",
+      "bytes": 438936
+    },
+    "fusion_fp32": {
+      "runs": 30,
+      "warmup": 5,
+      "mean_ms": 0.0157,
+      "median_ms": 0.0155,
+      "min_ms": 0.0152,
+      "max_ms": 0.017,
+      "p95_ms": 0.0165,
+      "stdev_ms": 0.0004,
+      "file": "attention_fusion_fp32.onnx",
+      "bytes": 112106
+    }
+  },
+  "pipelines": {
+    "onnx_int8_end_to_end": {
+      "runs": 10,
+      "warmup": 5,
+      "mean_ms": 60.5205,
+      "median_ms": 59.9731,
+      "min_ms": 59.5934,
+      "max_ms": 63.1849,
+      "p95_ms": 63.1849,
+      "stdev_ms": 1.1479
+    }
+  },
+  "summary": {
+    "int8_three_model_total_ms": 33.3206,
+    "fp32_three_model_total_ms": 1.267,
+    "int8_vs_fp32_speed_ratio": 26.299,
+    "note": "A ratio > 1 means INT8 is SLOWER than fp32 on this host. The original report's 'INT8 is 22x faster' claim was never measured; it does not hold on this x86_64 host (see docs/LIMITATIONS.md)."
+  }
+}

@@ -1,0 +1,66 @@
+# ---------------------------------------------------------------------------
+# Canonical configuration for the local (PC) runtime.
+#
+# Values are frozen from the Phase 0 audit of the original prototype:
+#   * threshold 0.85          -> Pi_Multimodal_Auth_Project/config/settings.yaml
+#   * face 112x112, /128 norm -> utils/vision_ops.py
+#   * MFCC 40, pad 400, 16kHz -> utils/audio_ops.py
+#   * embed_dim 128           -> models/*.py signatures
+# Phase 1 must NOT retrain or re-tune any of these.
+#
+# Paths are resolved relative to the project root, so the repository can be
+# cloned/moved anywhere (no absolute paths, no OneDrive dependency).
+# ---------------------------------------------------------------------------
+
+project:
+  name: multimodal-auth
+  # free-form note shown by scripts/infer.py --help output
+  status: "research prototype - not a production biometric system"
+
+paths:
+  onnx_models: weights/onnx
+  pytorch_models: weights/pytorch
+
+models:
+  face:
+    onnx: face_extractor_quant.onnx
+    pytorch: face_extractor_weights.pth
+    input_shape: [3, 112, 112]
+    embed_dim: 128
+  voice:
+    onnx: voice_extractor_quant.onnx
+    pytorch: voice_extractor_weights.pth
+    input_shape: [1, 40, 400]
+    embed_dim: 128
+  fusion:
+    onnx: attention_fusion_quant.onnx
+    pytorch: attention_fusion_weights.pth
+    input_shape: [128, 128]
+    hidden_dim: 64
+
+preprocessing:
+  face:
+    image_size: 112
+    normalization:
+      mean: 127.5
+      scale: 128.0
+    detector:
+      kind: haar
+      cascade: haarcascade_frontalface_default.xml
+      scale_factor: 1.1
+      min_neighbors: 4
+      largest_face: true
+      fallback: center_crop      # used when no face is detected
+  voice:
+    sample_rate: 16000
+    n_mfcc: 40
+    max_pad_len: 400
+    backend: librosa
+
+runtime:
+  backend: onnx                  # onnx | pytorch
+  provider: CPUExecutionProvider
+  intra_op_num_threads: 2
+
+decision:
+  threshold: 0.85

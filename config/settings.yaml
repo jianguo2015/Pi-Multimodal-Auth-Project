@@ -1,11 +1,18 @@
 # 路径配置
+# NOTE (Phase 1): the two weight directories were renamed
+#   weights/pytorch_pth -> weights/pytorch
+#   weights/onnx_int8   -> weights/onnx
+# so that this historical config keeps resolving against the current layout.
+# This file is preserved for provenance (read by app_pi/pi_main.py and by the
+# frozen scripts in scripts_pc/). The canonical, validated configuration for
+# this repository is configs/default.yaml.
 paths:
   raw_voice_dir: "../data/raw/voice"
   raw_face_dir: "../data/raw/face"
   processed_voice_dir: "../data/processed/voice_features"
   processed_face_dir: "../data/processed/face_features"
-  pytorch_weights_dir: "../weights/pytorch_pth"
-  onnx_weights_dir: "../weights/onnx_int8"
+  pytorch_weights_dir: "../weights/pytorch"
+  onnx_weights_dir: "../weights/onnx"
 
 # 特征提取与模型参数
 model:

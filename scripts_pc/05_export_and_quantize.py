@@ -1,3 +1,24 @@
+# ============================================================================
+# FROZEN (Phase 0 audit) - historical PC pipeline. Superseded by scripts/.
+# Kept in the repository as provenance for how the shipped weights were
+# produced. Do not re-run it: it targeted the pre-Phase-1 layout
+# (models/, utils/, weights/pytorch_pth) and its training step wrote
+# straight back into weights/, which is exactly the Phase 0 incident.
+# The three modern replacements are:
+#   scripts/data/01_build_voice_features.py  (was 01_process_audio.py)
+#   scripts/data/02_build_face_features.py   (was 02_process_face.py)
+#   scripts/train/train_extractors.py + train_fusion.py
+#   scripts/export.py                        (was 05_export_and_quantize.py)
+# Set MULTIMODAL_AUTH_RUN_LEGACY=1 to bypass this guard at your own risk.
+# ============================================================================
+import os as _os, sys as _sys
+
+if _os.environ.get("MULTIMODAL_AUTH_RUN_LEGACY") != "1":
+    _sys.exit(
+        "FROZEN legacy script (scripts_pc/): nothing was executed.\n"
+        "Its imports (models.*, utils.*) and weight paths no longer exist."
+    )
+
 import torch
 from onnxruntime.quantization import quantize_dynamic, QuantType, shape_inference
 import os

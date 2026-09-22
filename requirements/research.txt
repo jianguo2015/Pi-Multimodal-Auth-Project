@@ -1,0 +1,11 @@
+# Research / training / export requirements.
+#
+# Only needed for:
+#   * scripts/export.py            (PyTorch -> ONNX -> dynamic INT8)
+#   * scripts/train/*.py           (re-training, sandboxed, never in place)
+#   * --backend pytorch            (attention-gate inspection)
+-r runtime.txt
+
+torch>=2.0
+torchvision>=0.15
+onnx>=1.14

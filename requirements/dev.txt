@@ -1,0 +1,4 @@
+# Development / test requirements (runtime.txt is included by installing both).
+-r runtime.txt
+
+pytest>=8.0

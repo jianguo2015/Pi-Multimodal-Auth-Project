@@ -1,3 +1,20 @@
+# ============================================================================
+# HISTORICAL / EDGE-ONLY - Raspberry Pi 4B entry point. Preserved for
+# provenance; not part of the supported Phase 1 workflow.
+#
+# * It was never actually run on a Raspberry Pi in this project, and the
+#   "INT8 is 22x faster" claim in the original report was never reproduced.
+#   On x86 the INT8 graphs are ~22x SLOWER than fp32 (see docs/benchmarks/).
+# * It cannot run on Windows or macOS: it needs sounddevice capture and
+#   /sys/firmware/... device files, and it hard-codes the 2-thread Pi setting.
+# * Its dependency pin (requirements_pi.txt: onnxruntime==1.16.0) cannot load
+#   the shipped INT8 graphs, which need onnxruntime >= 1.24.1.
+# * Phase 1 renamed the weight directories (weights/onnx_int8 -> weights/onnx);
+#   the update below is the only functional change made to this file.
+#
+# The supported, testable equivalent is:  python -m multimodal_auth --help
+# See docs/HISTORICAL_EDGE_DEPLOYMENT.md and docs/LIMITATIONS.md.
+# ============================================================================
 import os
 import time
 import numpy as np
@@ -73,4 +90,4 @@ if __name__ == "__main__":
         app = PiMultimodalAuth()
         app.authenticate()
     except Exception as e:
-        print(f"初始化失败: {e}\n(请确认是否已在 PC 端完成了量化并把模型放置到了 weights/onnx_int8/)")
+        print(f"初始化失败: {e}\n(请确认是否已在 PC 端完成了量化并把模型放置到了 weights/onnx/)")

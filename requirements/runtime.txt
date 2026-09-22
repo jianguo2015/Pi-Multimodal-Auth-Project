@@ -1,0 +1,13 @@
+# Runtime requirements for local inference and the tests.
+#
+# IMPORTANT: onnxruntime must be >= 1.24.1. The INT8 graphs in weights/onnx/
+# contain ConvInteger nodes, which onnxruntime cannot parse before 1.24.
+# The historical Raspberry-Pi pin (1.16.0) cannot even load them - see
+# docs/LIMITATIONS.md and docs/HISTORICAL_EDGE_DEPLOYMENT.md.
+onnxruntime==1.24.1
+
+numpy>=1.24
+PyYAML>=6.0
+opencv-python-headless>=4.8
+librosa>=0.10
+soundfile>=0.12
