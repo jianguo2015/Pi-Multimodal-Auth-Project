@@ -21,6 +21,7 @@ from .decision.policy import validate_threshold
 from .errors import ConfigError, InvalidInputError, ModelArtifactError, SafetyError
 from .pipeline.pipeline import VALID_BACKENDS, MultimodalPipeline
 from .reporting import print_report
+from .safety import portable_path
 from .safety import assert_not_protected
 
 EXIT_OK = 0
@@ -79,7 +80,7 @@ def _run(args) -> int:
     if args.json:
         print(json.dumps(result.as_dict(), indent=2, ensure_ascii=False))
     else:
-        print_report(result, str(config.source))
+        print_report(result, portable_path(config.source, config.root))
 
     if args.output:
         target = assert_not_protected(Path(args.output), config.root)
