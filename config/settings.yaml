@@ -1,0 +1,27 @@
+# 路径配置
+paths:
+  raw_voice_dir: "../data/raw/voice"
+  raw_face_dir: "../data/raw/face"
+  processed_voice_dir: "../data/processed/voice_features"
+  processed_face_dir: "../data/processed/face_features"
+  pytorch_weights_dir: "../weights/pytorch_pth"
+  onnx_weights_dir: "../weights/onnx_int8"
+
+# 特征提取与模型参数
+model:
+  voice_n_mfcc: 40
+  voice_max_pad_len: 400
+  face_image_size: 112
+  embed_dim: 128         # 统一提取的特征维度(128维)
+  fusion_hidden_dim: 64
+
+# 训练超参数
+train:
+  batch_size: 32
+  learning_rate: 0.001
+  epochs_single: 20      # 单模态训练轮数
+  epochs_fusion: 15      # 融合层训练轮数
+
+# 推理阈值
+inference:
+  fusion_threshold: 0.85 # 融合后的通过阈值

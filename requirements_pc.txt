@@ -1,0 +1,12 @@
+torch
+torchvision
+torchaudio
+librosa
+soundfile
+numpy
+opencv-python
+PyYAML
+tqdm
+onnx
+onnxruntime
+scikit-learn
