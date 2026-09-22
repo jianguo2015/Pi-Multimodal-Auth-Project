@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2026 jianguo2015 <https://github.com/jianguo2015>
+Copyright (c) 2026 jianguo2015
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,16 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
--------------------------------------------------------------------------------
-SCOPE OF THIS LICENSE
-
-This MIT license covers the source code, documentation, configuration and
-scripts in this repository.
-
-It does NOT cover the trained model parameters under `weights/` (the three
-`.pth` checkpoints and the six `.onnx` graphs). Those files are distributed
-under the separate terms in `MODEL_NOTICE.md`, because the shipped networks
-were trained with the help of a research-use face dataset that cannot be
-relicensed here. Third-party components and datasets are listed in
-`THIRD_PARTY_NOTICES.md`.

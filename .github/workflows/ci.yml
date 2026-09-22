@@ -89,7 +89,6 @@ jobs:
         run: |
           set -o pipefail
           python -m pytest tests/test_phase0_reference.py -rs -q | tee reference.log
-          grep -q "private biometric data not present on this machine" reference.log
-          grep -q "4 skipped" reference.log
+          grep -q "^SKIPPED \[4\] tests/test_phase0_reference.py: private biometric data not present on this machine$" reference.log
       - name: Full suite with the research extras (4 skips, documented reason)
         run: python -m pytest -rs -q

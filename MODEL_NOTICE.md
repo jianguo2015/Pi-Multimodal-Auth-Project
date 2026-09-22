@@ -5,6 +5,18 @@ The nine files under `weights/` are the **trained parameters** of this project
 They are covered by the terms below, **not** by the MIT license in `LICENSE`,
 which applies to the source code, configuration, scripts and documentation only.
 
+## Scope of the two licenses
+
+`LICENSE` carries the unmodified MIT text.
+
+**MIT applies to the source code.**
+The trained model weights under `weights/` are governed by the separate terms
+specified in `MODEL_NOTICE.md` (this file) and are **not** covered by MIT.
+
+The `SCOPE OF THIS LICENSE` rider that used to be appended to `LICENSE` now
+lives here instead, so that the repository's code license is machine-detectable
+as the standard MIT template. The licensing policy itself is unchanged.
+
 ## Terms
 
 The model parameters are released for **research, evaluation and non-commercial
