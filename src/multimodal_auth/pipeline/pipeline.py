@@ -17,6 +17,7 @@ import numpy as np
 from ..config.loader import Config, load_config
 from ..decision.policy import DecisionResult, evaluate
 from ..errors import InvalidAudioError, InvalidImageError
+from ..safety import portable_path
 from .types import AuthResult, summarise
 
 VALID_BACKENDS = ("onnx", "pytorch")
@@ -67,8 +68,11 @@ class MultimodalPipeline:
         info: Dict[str, object] = {
             "backend": self.backend_name,
             "threshold": self.threshold,
-            "config": str(self.config.source),
-            "model_files": dict(self.engine.model_files),
+            "config": portable_path(self.config.source, self.config.root),
+            "model_files": {
+                role: portable_path(path, self.config.root)
+                for role, path in self.engine.model_files.items()
+            },
         }
         if hasattr(self.engine, "ort_version"):
             info["onnxruntime_version"] = self.engine.ort_version
@@ -123,10 +127,13 @@ class MultimodalPipeline:
             voice_embedding=summarise("voice", voice_embedding),
             backend=self.backend_name,
             attention=attention,
-            model_files=dict(self.engine.model_files),
+            model_files={
+                role: portable_path(path, self.config.root)
+                for role, path in self.engine.model_files.items()
+            },
             inputs={
-                "face": _describe_source(face_source),
-                "voice": _describe_source(voice_source),
+                "face": _describe_source(face_source, self.config.root),
+                "voice": _describe_source(voice_source, self.config.root),
             },
             warnings=warnings,
         )
@@ -141,9 +148,9 @@ class MultimodalPipeline:
         return result
 
 
-def _describe_source(source) -> str:
+def _describe_source(source, root) -> str:
     if isinstance(source, (str, Path)):
-        return str(Path(source).resolve())
+        return portable_path(source, root)
     if isinstance(source, np.ndarray):
         return "<ndarray shape=%s>" % (tuple(source.shape),)
     return "<%s>" % type(source).__name__

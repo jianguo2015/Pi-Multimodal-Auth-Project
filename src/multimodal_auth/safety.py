@@ -103,6 +103,22 @@ def prepare_output_dir(
     return target
 
 
+def portable_path(value: PathLike, root: PathLike) -> str:
+    """Render a path so reports never expose a machine-specific location.
+
+    Absolute Windows paths contain the local user name. The JSON produced by
+    ``scripts/infer.py`` is meant to be copy-pasteable (an issue, a README, CI
+    output), so it must not leak one. Paths inside ``root`` become POSIX-relative
+    (``weights/onnx/face_extractor_quant.onnx``); anything outside keeps only the
+    file name (``<outside the project>/me.jpg``).
+    """
+    resolved = Path(value).resolve()
+    try:
+        return resolved.relative_to(Path(root).resolve()).as_posix()
+    except ValueError:
+        return "<outside the project>/%s" % resolved.name
+
+
 def file_digest(path: PathLike, algorithm: str = "sha256", chunk_size: int = 1 << 20) -> str:
     """Hex digest of a file (default SHA-256), streamed so big files are fine."""
     digest = hashlib.new(algorithm)

@@ -13,43 +13,44 @@ build/
 dist/
 
 # ---------------------------------------------------------------------------
+# Paths below are anchored to the repository root on purpose ("/data/", not
+# "data/"). An unanchored "data/" also matches any nested directory called
+# "data" - which silently kept scripts/data/*.py (the feature-building scripts
+# referenced by docs/REPRODUCIBILITY.md) out of every commit until Phase 2.
+# ---------------------------------------------------------------------------
+
 # local audit artefacts from Phase 0 (kept on disk, never published)
-# ---------------------------------------------------------------------------
-_phase0_audit/
-phase0_tree.txt
+/_phase0_audit/
+/phase0_tree.txt
+/phase0_inventory.csv
 
-# ---------------------------------------------------------------------------
 # PRIVATE BIOMETRIC DATA - must never be committed
-# ---------------------------------------------------------------------------
-data/
-private/
-datasets/private/
-live_capture.jpg
+/data/
+/private/
+/datasets/private/
+/live_capture.jpg
 
-# ---------------------------------------------------------------------------
 # run artefacts
-# ---------------------------------------------------------------------------
-outputs/
-checkpoints/
+/outputs/
+/checkpoints/
+/logs/
 *.log
-logs/
+.pytest_cache/
 
-# ---------------------------------------------------------------------------
+# build / packaging leftovers
+*.whl
+
 # unrelated coursework living in the same folder (Phase 0: UNRELATED)
-# ---------------------------------------------------------------------------
-my_gan_data/
-pokemon.zip
-1.py
-2.py
-3.py
-train_gan.py
+/my_gan_data/
+/pokemon.zip
+/1.py
+/2.py
+/3.py
+/train_gan.py
 
-# ---------------------------------------------------------------------------
 # large datasets that belong to other projects
-# ---------------------------------------------------------------------------
-data/cifar-10*
+/data/cifar-10*
 
-# ---------------------------------------------------------------------------
 # local-only regression suite that needs real biometric data
-# ---------------------------------------------------------------------------
-tests/private/
+/tests/private/
+

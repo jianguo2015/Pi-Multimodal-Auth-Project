@@ -8,6 +8,15 @@ onnxruntime==1.24.1
 
 numpy>=1.24
 PyYAML>=6.0
-opencv-python-headless>=4.8
+
+# IMPORTANT: opencv-python-headless must stay below 5.
+# `preprocessing/face.py` resolves the Haar cascade through
+# `cv2.data.haarcascades`. The 4.x wheels ship cv2/data/haarcascade_*.xml
+# (verified: opencv-python-headless 4.14.0.94 contains 18 files under cv2/data),
+# while the 5.x wheels ship only `cv2/data/__init__.py` - installing 5.0.0.93
+# makes every face input fail with "Haar cascade not available".
+# See docs/RELEASE_AUDIT.md section "Dependency hazard".
+opencv-python-headless>=4.8,<5
+
 librosa>=0.10
 soundfile>=0.12

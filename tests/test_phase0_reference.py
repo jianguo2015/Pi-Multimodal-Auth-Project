@@ -6,21 +6,40 @@ are the strongest check in the repository: they reproduce the exact figures
 published in ``docs/REPRODUCTION_STATUS.md``
 
     genuine  mean 0.9182  min 0.8943  max 0.9293  accept@0.85 = 1.00
-    impostor max <= 0.0483 (35-pair subset)        accept@0.85 = 0.00
+    impostor max 0.0511 over the expanded 625-pair grid   accept@0.85 = 0.00
+
+They also need the research extras (``requirements/research.txt``, i.e. torch).
+That dependency must surface as *skipped tests*, never as a collection error,
+because the documented public command ``pytest -m "not private_data"`` still
+collects every module before the marker filter runs. The model imports are
+therefore deferred until torch is known to be importable.
 """
 
 from __future__ import annotations
 
+import importlib.util
+
 import numpy as np
 import pytest
-import torch
 
 from multimodal_auth.decision import evaluate
-from multimodal_auth.fusion import ModalAttentionFusion
-from multimodal_auth.models import FaceExtractor, VoiceExtractor
 from multimodal_auth.preprocessing import preprocess_face, preprocess_voice
 
-pytestmark = pytest.mark.private_data
+TORCH_AVAILABLE = importlib.util.find_spec("torch") is not None
+
+if TORCH_AVAILABLE:
+    import torch
+
+    from multimodal_auth.fusion import ModalAttentionFusion
+    from multimodal_auth.models import FaceExtractor, VoiceExtractor
+
+pytestmark = [
+    pytest.mark.private_data,
+    pytest.mark.skipif(
+        not TORCH_AVAILABLE,
+        reason="the reference tier needs requirements/research.txt (torch)",
+    ),
+]
 
 PHASE0_GENUINE = {"mean": 0.9182, "min": 0.8943, "max": 0.9293}
 
